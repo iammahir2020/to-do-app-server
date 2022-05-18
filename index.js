@@ -45,6 +45,22 @@ async function run() {
       const result = await taskCollection.deleteOne(query);
       res.send(result);
     });
+
+    app.put("/task", async (req, res) => {
+      const id = req.query.id;
+      const data = req.body;
+      const filter = {
+        _id: ObjectId(id),
+      };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          complete: data.complete,
+        },
+      };
+      const result = await taskCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
   } finally {
   }
 }

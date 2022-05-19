@@ -13,12 +13,12 @@ app.use(express.json());
 function varifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    return res.status(401).send({ message: "Unauthorized Access" });
+    return res.status(401).send([{ message: "Unauthorized Access" }]);
   }
   const token = authHeader.split(" ")[1];
   jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
     if (err) {
-      return res.status(403).send({ message: "Forbidden Access" });
+      return res.status(403).send([{ message: "Forbidden Access" }]);
     }
     console.log(decoded);
     req.decoded = decoded;
@@ -58,7 +58,7 @@ async function run() {
         const tasks = await taskCollection.find(query).toArray();
         res.send(tasks);
       } else {
-        return res.status(403).send({ message: "Forbidden Access" });
+        return res.status(403).send([{ message: "Forbidden Access" }]);
       }
     });
 
